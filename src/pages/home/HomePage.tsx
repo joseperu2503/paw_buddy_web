@@ -1,13 +1,12 @@
 import logo from "../../assets/icons/logo.svg";
 import dog from "../../assets/images/dog.png";
-
-import "./HomePage.css";
+import styles from "./HomePage.module.scss";
 
 export function HomePage() {
   return (
-    <div className="page">
-      <img src={logo} alt="logo" className="logo" />
-      <img src={dog} alt="dog" className="dog" />
+    <div className={styles.page}>
+      <img src={logo} alt="logo" className={styles.logo} />
+      <img src={dog} alt="dog" className={styles.dog} />
     </div>
   );
 }

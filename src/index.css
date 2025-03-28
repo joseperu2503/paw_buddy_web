@@ -73,3 +73,9 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+@import url("https://fonts.googleapis.com/css2?family=Catamaran:wght@100..900&display=swap");
+
+* {
+  font-family: "Catamaran", sans-serif;
+}
