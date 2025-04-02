@@ -1,8 +1,8 @@
 import noPets from "../../../../../assets/icons/no-pets.svg";
 import { Button } from "../../../../shared/components/button/Button";
-import styles from "./DashboardPage.module.scss";
+import styles from "./ContactsPage.module.scss";
 
-export function DashboardPage() {
+export function ContactsPage() {
   return (
     <div className={styles.noPets}>
       <div className={styles.content}>
