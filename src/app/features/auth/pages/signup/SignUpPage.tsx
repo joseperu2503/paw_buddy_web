@@ -4,24 +4,41 @@ import logo from "@assets/icons/logo.svg";
 import user from "@assets/icons/user.svg";
 import dog from "@assets/images/dog.png";
 
-import { MouseEvent, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { z } from "zod";
 import styles from "./SignUpPage.module.scss";
+
+const schema = z.object({
+  name: z.string().min(1, "El nombre es obligatorio"),
+  email: z.string().email("Email inválido"),
+  password: z.string().min(8, "Debe tener al menos 8 caracteres"),
+});
 
 export function SigUpPage() {
   const navigate = useNavigate();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(schema) });
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  // const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
 
-    navigate("/dashboard");
-  };
+  //   navigate("/dashboard");
+  // };
 
   const togleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const onSubmit = handleSubmit((data) => console.log(data));
 
   return (
     <div className={styles.background2}>
@@ -32,7 +49,7 @@ export function SigUpPage() {
         </div>
 
         <div className={styles.rightSide}>
-          <div className={styles.card}>
+          <form className={styles.card} onSubmit={onSubmit}>
             <div className={styles.mainIcon}>
               <div className={styles.decorator}>
                 <img src={user} alt="user" className={styles.icon} />
@@ -44,18 +61,32 @@ export function SigUpPage() {
                 Welcome! Please enter your information below and get started.
               </p>
 
-              <form className={styles.form}>
+              <div
+                className={styles.form}
+                onSubmit={handleSubmit((data) => console.log(data))}
+              >
+                <input
+                  type="text"
+                  placeholder="Name"
+                  className={styles.input}
+                  {...register("name")}
+                />
+                {errors.name && <p>{errors.name?.message}</p>}
+
                 <input
                   type="email"
                   placeholder="Email"
                   className={styles.input}
+                  {...register("email", { required: true })}
                 />
+                {errors.email && <p>{errors.email?.message}</p>}
 
                 <div className={styles.passwordContainer}>
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     className={styles.input}
+                    {...register("password", { required: true })}
                   />
                   <img
                     src={showPassword ? eyeOpen : eyeClosed}
@@ -64,19 +95,17 @@ export function SigUpPage() {
                     onClick={togleShowPassword}
                   />
                 </div>
+                {errors.password && <p>{errors.password?.message}</p>}
+
                 <div className={styles.checkboxContainer}>
                   <input type="checkbox" className={styles.checkbox} />
                   <p>Accept Terms and Conditions</p>
                 </div>
-              </form>
+              </div>
             </div>
 
             <div className={styles.buttons}>
-              <button
-                type="submit"
-                className={styles.button}
-                onClick={handleSubmit}
-              >
+              <button type="submit" className={styles.button}>
                 Create account
               </button>
 
@@ -89,7 +118,7 @@ export function SigUpPage() {
                 </p>
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
