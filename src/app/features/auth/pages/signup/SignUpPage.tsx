@@ -142,7 +142,7 @@ export function SigUpPage() {
               </button>
 
               <button type="button" className={styles.textButton}>
-                <p className={styles.footerText}>
+                <p>
                   Already have an account?{" "}
                   <a href="/login" className={styles.link}>
                     Log in here
