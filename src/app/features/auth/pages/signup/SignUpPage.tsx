@@ -23,6 +23,7 @@ const schema = z.object({
       message:
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
     }),
+  acceptTerms: z.literal(true, "Accept terms and conditions"),
 });
 
 export function SigUpPage() {
@@ -125,7 +126,11 @@ export function SigUpPage() {
                 </div>
 
                 <div className={styles.checkboxContainer}>
-                  <input type="checkbox" className={styles.checkbox} />
+                  <input
+                    type="checkbox"
+                    className={styles.checkbox}
+                    {...register("acceptTerms")}
+                  />
                   <p>Accept Terms and Conditions</p>
                 </div>
               </div>
