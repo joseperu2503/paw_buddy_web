@@ -9,36 +9,41 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
+import { signUp } from "../../services/auth.service";
 import styles from "./SignUpPage.module.scss";
 
 const schema = z.object({
-  name: z.string().min(1, "El nombre es obligatorio"),
-  email: z.string().email("Email inválido"),
-  password: z.string().min(8, "Debe tener al menos 8 caracteres"),
+  name: z.string().min(1, "Name is required"),
+  email: z.email("Email is invalid"),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" })
+    .max(50, { message: "Password must be at most 50 characters long" })
+    .regex(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+      message:
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+    }),
 });
 
 export function SigUpPage() {
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
-
-  // const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-
-  //   navigate("/dashboard");
-  // };
 
   const togleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const onSubmit = handleSubmit(async (data) => {
+    await signUp(data);
+    navigate("/dashboard");
+  });
 
   return (
     <div className={styles.background2}>
@@ -65,37 +70,59 @@ export function SigUpPage() {
                 className={styles.form}
                 onSubmit={handleSubmit((data) => console.log(data))}
               >
-                <input
-                  type="text"
-                  placeholder="Name"
-                  className={styles.input}
-                  {...register("name")}
-                />
-                {errors.name && <p>{errors.name?.message}</p>}
-
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className={styles.input}
-                  {...register("email", { required: true })}
-                />
-                {errors.email && <p>{errors.email?.message}</p>}
-
-                <div className={styles.passwordContainer}>
+                <div className={styles.formItem}>
                   <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    className={styles.input}
-                    {...register("password", { required: true })}
+                    type="text"
+                    placeholder="Name"
+                    className={`${styles.input} ${
+                      errors.name ? styles.errorInput : ""
+                    }`}
+                    {...register("name")}
                   />
-                  <img
-                    src={showPassword ? eyeOpen : eyeClosed}
-                    alt="eye-closed"
-                    className={styles.eyeIcon}
-                    onClick={togleShowPassword}
-                  />
+                  {errors.name && (
+                    <span className={styles.error}>{errors.name?.message}</span>
+                  )}
                 </div>
-                {errors.password && <p>{errors.password?.message}</p>}
+
+                <div className={styles.formItem}>
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    className={`${styles.input} ${
+                      errors.name ? styles.errorInput : ""
+                    }`}
+                    {...register("email", { required: true })}
+                  />
+                  {errors.email && (
+                    <span className={styles.error}>
+                      {errors.email?.message}
+                    </span>
+                  )}
+                </div>
+
+                <div className={styles.formItem}>
+                  <div className={styles.passwordContainer}>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      className={`${styles.input} ${
+                        errors.name ? styles.errorInput : ""
+                      }`}
+                      {...register("password", { required: true })}
+                    />
+                    <img
+                      src={showPassword ? eyeOpen : eyeClosed}
+                      alt="eye-closed"
+                      className={styles.eyeIcon}
+                      onClick={togleShowPassword}
+                    />
+                  </div>
+                  {errors.password && (
+                    <span className={styles.error}>
+                      {errors.password?.message}
+                    </span>
+                  )}
+                </div>
 
                 <div className={styles.checkboxContainer}>
                   <input type="checkbox" className={styles.checkbox} />
