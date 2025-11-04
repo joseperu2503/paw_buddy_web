@@ -41,8 +41,19 @@ export function SigUpPage() {
     setShowPassword(!showPassword);
   };
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = handleSubmit(async (data) => {
-    await signUp(data);
+    setLoading(true);
+
+    await signUp({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
+
+    setLoading(false);
+
     navigate("/dashboard");
   });
 
@@ -137,8 +148,12 @@ export function SigUpPage() {
             </div>
 
             <div className={styles.buttons}>
-              <button type="submit" className={styles.button}>
-                Create account
+              <button
+                type="submit"
+                className={styles.button}
+                disabled={loading}
+              >
+                {loading ? "Creating account..." : "Create account"}
               </button>
 
               <button type="button" className={styles.textButton}>
