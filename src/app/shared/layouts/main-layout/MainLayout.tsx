@@ -4,10 +4,8 @@ import calendar from "../../../../assets/icons/calendar.svg";
 import contacts from "../../../../assets/icons/contacts.svg";
 import dashboard from "../../../../assets/icons/dashboard.svg";
 import logo2 from "../../../../assets/icons/logo-2.svg";
-import logout from "../../../../assets/icons/logout.svg";
 import plus from "../../../../assets/icons/plus.svg";
 import settings from "../../../../assets/icons/settings.svg";
-import profile from "../../../../assets/images/profile.png";
 import { SvgIcon } from "../../components/svg-icon/SvgIcon";
 import styles from "./MainLayout.module.scss";
 
@@ -72,7 +70,7 @@ export const MainLayout = () => {
             <span>Settings</span>
           </NavLink>
         </div>
-        <div className={styles.profile}>
+        {/* <div className={styles.profile}>
           <img src={profile} alt="" className={styles.profileImage} />
           <div className={styles.profileName}>
             <span className={styles.greeting}>Hello</span>
@@ -80,7 +78,7 @@ export const MainLayout = () => {
           </div>
 
           <img src={logout} alt="" className={styles.logout} />
-        </div>
+        </div> */}
       </div>
       <div className={styles.content}>
         <div className={styles.card}>
